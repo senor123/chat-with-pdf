@@ -35,7 +35,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-service_token.json
+service-token.json
 
 
 .vercel
