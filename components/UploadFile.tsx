@@ -1,8 +1,8 @@
 'use client';
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 
 import {useDropzone} from 'react-dropzone';
-
+import useUpload from '@/hooks/useUpload';
 import {
     CheckCircleIcon,
     CircleArrowDown,
@@ -10,13 +10,27 @@ import {
     RocketIcon,
     SaveIcon
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 function Upload() {
+
+  const {fileId,progress,status,handleUpload}=useUpload();
+  const router=useRouter();
+
+  useEffect(()=>{
+    if(fileId){
+      router.push(`/dashboard/files/${fileId}`)
+    }
+    
+  },[fileId,router]);
   const onDrop = useCallback((acceptedFiles:File[]) => {
     // Do something with the files
     console.log(acceptedFiles[0]);
-  }, [])
-  const {getRootProps, getInputProps, isDragActive, isFocused ,isDragAccept} = useDropzone({onDrop})
+    if(acceptedFiles[0]){
+      handleUpload(acceptedFiles[0]);
+    }
+  }, [handleUpload]);
+  const {getRootProps, getInputProps, isDragActive, isFocused ,isDragAccept} = useDropzone({onDrop,accept:{"application/pdf":[".pdf"]}})
 
   return (
     <div className='flex flex-col items-center max-w-7xl mx-auto'>
